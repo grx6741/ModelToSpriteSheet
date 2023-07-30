@@ -8,17 +8,18 @@ class Triangle:
         self.ctx = app.ctx
         self.program = self.get_shader_program("triangle")
         self.vbo = self.ctx.buffer(self.get_vertices())
-        self.vao = self.ctx.vertex_array( self.program, [(self.vbo, '2f', 'in_pos')])
+        self.vao = self.ctx.vertex_array( self.program, [(self.vbo, '2f 3f', 'in_pos', 'in_color')])
 
     def render(self):
-        self.vao.render()
+        self.vao.render(mode=moderngl.TRIANGLE_STRIP)
 
     def get_vertices(self):
         return np.array([
-            [-0.5, -0.5],
-            [ 0.5, -0.5],
-            [ 0.0,  0.5]
-            ], dtype='f4')
+            [-0.5, -0.5, 1.0, 0.0, 0.0,
+              0.5, -0.5, 0.0, 1.0, 0.0,
+             -0.5,  0.5, 0.0, 0.0, 1.0,
+              0.5,  0.5, 0.0, 0.0, 1.0,
+             ]], dtype='f4')
 
     def get_shader_program(self, name):
         path = f"shader/{name}/"
